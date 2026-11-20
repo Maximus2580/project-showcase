@@ -14,17 +14,17 @@ from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / '.claude/skills/project-showcase/scripts'))
+sys.path.insert(0, str(ROOT / 'skills/project-showcase/scripts'))
 import showcase as s
 from render import body
+from bootstrap import environment_fixture
 
 
 class PipelineTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.out = Path(self.temp.name)
-        shutil.copytree(s.SKILL / 'examples/input', self.out / 'input')
-        self.m = s.read(s.SKILL / 'examples/project.json')
+        self.m = environment_fixture(self.out)
         self.m['schema_version'] = 2
         self.m['profile'] = 'sample'
         # Keep an actual image fixture; never let a missing image mask a gate failure.
@@ -420,9 +420,9 @@ class PipelineTests(unittest.TestCase):
                     s.write(self.out / 'project.json', model)
                     with self.assertRaisesRegex(ValueError, 'E_EMPHASIS_TARGET'): s.load(self.out)
 
-    def test_init_copies_example_assets_and_preserves_original(self):
+    def test_init_creates_neutral_outline_and_preserves_original(self):
         args = Namespace(out=self.out / '한글 폴더', project=self.out)
-        s.init(args); s.load(args.out); original = (args.out / 'project.json').read_bytes()
+        s.init(args); model=s.load(args.out); self.assertTrue(all(x['verification']=='unverified' for x in model['scenes'])); self.assertEqual(list((args.out/'input').iterdir()),[]); original = (args.out / 'project.json').read_bytes()
         with self.assertRaises(ValueError): s.init(args)
         self.assertEqual(original, (args.out / 'project.json').read_bytes())
 

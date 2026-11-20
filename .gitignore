@@ -13,3 +13,16 @@ artifacts/
 *.log
 .coverage
 .pytest_cache/
+
+# Generated media stays local. The public guide uses one current cover.
+*.mp4
+*.mp3
+*.wav
+*.zip
+*.png
+*.jpg
+*.jpeg
+*.webp
+!public/preview.png
+.claude/
+examples/

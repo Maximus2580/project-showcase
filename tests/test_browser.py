@@ -11,12 +11,15 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from argparse import Namespace
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS = ROOT / '.claude/skills/project-showcase/scripts'
+SCRIPTS = ROOT / 'skills/project-showcase/scripts'
 sys.path.insert(0, str(SCRIPTS))
 import showcase as s
 from render import build_outputs
+import design as d
+from bootstrap import environment_fixture
 
 
 class DeckBrowserTests(unittest.TestCase):
@@ -30,8 +33,7 @@ class DeckBrowserTests(unittest.TestCase):
         cls.fixture = cls.root / 'fixture'
         cls.fixture.mkdir()
         # Copy every referenced image; renderer creates local media/fonts assets.
-        shutil.copytree(s.SKILL / 'examples/input', cls.fixture / 'input')
-        shutil.copy2(s.SKILL / 'examples/project.json', cls.fixture / 'project.json')
+        environment_fixture(cls.fixture)
         model = s.load(cls.fixture)
         build_outputs(model, None, cls.fixture, s.SKILL)
 
@@ -48,6 +50,32 @@ class DeckBrowserTests(unittest.TestCase):
         self.assertTrue((output / 'report.json').is_file(), result.stderr + result.stdout)
         report = json.loads((output / 'report.json').read_text())
         return result, report
+
+    def design_fixture(self,name):
+        fixture=self.root/name;shutil.copytree(self.fixture,fixture)
+        d.scaffold(Namespace(out=fixture))
+        return fixture
+
+    def test_four_full_design_decks_pass_at_both_sizes(self):
+        fixture=self.design_fixture('designed-all')
+        for ident in ('direction-a','direction-b','direction-c','direction-d'):
+            source=fixture/'design/variants'/ident
+            m=s.load(fixture);m['_design']={'config':s.read(source/'variant.json'),'source':str(source)}
+            build_outputs(m,None,fixture,s.SKILL)
+            result,report=self.check_copy('full-'+ident,source=fixture)
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+            self.assertTrue(report['ok']);self.assertEqual(report['slide_count'],8)
+            self.assertEqual(report['viewports'],[1920,1280])
+
+    def test_invisible_ancestor_and_bad_contrast_are_rejected(self):
+        fixture=self.design_fixture('designed-hidden')
+        source=fixture/'design/variants/direction-a'
+        m=s.load(fixture);m['_design']={'config':s.read(source/'variant.json'),'source':str(source)}
+        build_outputs(m,None,fixture,s.SKILL)
+        for name,css,reason in [('hidden-header','.designed header{opacity:0}','hidden required content ancestor'),('hidden-stage','#stage{opacity:0}','hidden required content ancestor'),('bad-contrast','.designed h1{color:#f5f7fb}','text contrast')]:
+            result,report=self.check_copy(name,css,fixture)
+            self.assertEqual(result.returncode,1,result.stdout+result.stderr)
+            self.assertTrue(any(reason in issue for shot in report['shots'] for issue in shot['issues']))
 
     def test_normal_deck_passes_real_browser_and_navigation(self):
         result, report = self.check_copy('normal')

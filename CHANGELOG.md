@@ -1,15 +1,23 @@
 # Changelog
 
+## 2.2.0
+
+- Compare four project-specific design directions, each with three rendered slides, before choosing a revision.
+- Share layouts, typography, local assets, and content IDs across previews, slides, and video.
+- Preserve revisions and invalidate stale selections when their sources change.
+- Start new presentations with an unverified outline, without bundled demo applications.
+- Move the installable skill to `skills/project-showcase/`; provide English and Korean setup and usage guides.
+- Keep one current cover image public; exclude generated presentations, media, and local review files.
+- Prepare installation dependencies before replacement and restore the previous install if activation fails.
+
 ## 2.1.0
 
-- 스킬·명령·문서·예제 브랜딩을 Project Showcase / project-showcase로 변경했습니다.
-- 웹앱, 개발 도구, 자동화 스크립트와 프로토타입 소개를 포괄하도록 설명을 정리했습니다.
-- Claude Code와 Codex용 사용자 전역 설치 프로그램을 추가했습니다. 기존 설치는 보존하고 명시적 교체 시 백업합니다.
-- 공개 저장소용 설치 안내, 미리보기, MIT 라이선스를 추가했습니다. 의존성의 고지는 별도로 유지합니다.
+- Rename the skill to Project Showcase for web apps, developer tools, automation, and prototypes.
+- Add a user-level installer for Claude Code and Codex, with backup on replacement.
+- Publish installation guidance and the MIT license; retain dependency and font notices.
 
 ## 2.0.0
 
-- 발화별 음성과 실제 화면 상태를 연결하는 utterances/states/beats 구조.
-- 여러 슬라이드 구성, 데모 상태 선택, 화면 확대와 강조.
-- 실패 시 승인 무효화, 입력·출력 해시 검증, 수동 편집 보호, 재개와 ZIP 내보내기.
-- 브라우저 앱·CSV 자동화·실행 불가 프로젝트 fixture.
+- Connect utterances to real screen states, focus regions, and highlights.
+- Add input/output hashes, review invalidation, audio caching, recovery, and delivery ZIPs.
+- Preserve manual edits and distinguish automated checks from final listening review.
