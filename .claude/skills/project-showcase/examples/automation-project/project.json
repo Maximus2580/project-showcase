@@ -1,0 +1,266 @@
+{
+  "schema_version": 2,
+  "profile": "sample",
+  "title": "작업 현황 집계",
+  "audience": "업무 자동화 학습자",
+  "message": "CSV 집계 결과를 확인 가능한 보고서로",
+  "accent": "#b9ec8b",
+  "voice": "ko-KR-SunHiNeural",
+  "rate": "+5%",
+  "scenes": [
+    {
+      "id": "scene-01",
+      "slide": 1,
+      "kind": "problem",
+      "title": "작업 현황을 한 번에 확인합니다",
+      "claim": "합성 CSV 5행으로 집계 흐름을 확인했습니다.",
+      "visual_label": "작업 현황을 한 번에 확인합니다",
+      "points": [
+        "5행 입력",
+        "상태별 집계",
+        "로컬 결과"
+      ],
+      "verification": "executed",
+      "evidence": [
+        {
+          "source": "examples/automation-project/summarize.py + summary.json",
+          "finding": "합성 CSV 5행 실행. 완료2/지연2/진행1과 대조. 실제 업무 효과 미측정."
+        }
+      ],
+      "utterances": [
+        {
+          "id": "u01",
+          "text": "합성 CSV 5행으로 집계 흐름을 확인했습니다."
+        }
+      ],
+      "states": {},
+      "beats": []
+    },
+    {
+      "id": "scene-02",
+      "slide": 2,
+      "kind": "compare",
+      "title": "수작업 집계에서 파일 집계로",
+      "claim": "CSV를 읽어 상태별 건수를 셉니다.",
+      "visual_label": "수작업 집계에서 파일 집계로",
+      "points": [
+        "행별 수작업 확인",
+        "상태별 건수 집계",
+        "효과 측정은 미실시"
+      ],
+      "verification": "executed",
+      "evidence": [
+        {
+          "source": "examples/automation-project/summarize.py + summary.json",
+          "finding": "합성 CSV 5행 실행. 완료2/지연2/진행1과 대조. 실제 업무 효과 미측정."
+        }
+      ],
+      "utterances": [
+        {
+          "id": "u01",
+          "text": "CSV를 읽어 상태별 건수를 셉니다."
+        }
+      ],
+      "states": {},
+      "beats": []
+    },
+    {
+      "id": "scene-03",
+      "slide": 3,
+      "kind": "flow",
+      "title": "입력부터 보고서까지",
+      "claim": "CSV를 읽고 집계해 보고서로 저장합니다.",
+      "visual_label": "입력부터 보고서까지",
+      "points": [
+        "CSV 읽기",
+        "상태별 집계",
+        "HTML 저장"
+      ],
+      "verification": "executed",
+      "evidence": [
+        {
+          "source": "examples/automation-project/summarize.py + summary.json",
+          "finding": "합성 CSV 5행 실행. 완료2/지연2/진행1과 대조. 실제 업무 효과 미측정."
+        }
+      ],
+      "utterances": [
+        {
+          "id": "u01",
+          "text": "CSV를 읽고 집계해 보고서로 저장합니다."
+        }
+      ],
+      "states": {},
+      "beats": []
+    },
+    {
+      "id": "scene-04",
+      "slide": 4,
+      "kind": "demo",
+      "title": "실행 결과를 보고서로 확인합니다",
+      "claim": "완료 두 건, 지연 두 건, 진행 한 건입니다.",
+      "visual_label": "실행 결과를 보고서로 확인합니다",
+      "points": [
+        "실행 생성 보고서",
+        "서비스 UI 아님",
+        "합성 데이터"
+      ],
+      "verification": "executed",
+      "evidence": [
+        {
+          "source": "examples/automation-project/summarize.py + summary.json",
+          "finding": "합성 CSV 5행 실행. 완료2/지연2/진행1과 대조. 실제 업무 효과 미측정."
+        }
+      ],
+      "utterances": [
+        {
+          "id": "u01",
+          "text": "완료 두 건, 지연 두 건, 진행 한 건입니다."
+        }
+      ],
+      "states": {
+        "report": {
+          "media": "input/report.png",
+          "label": "실행 생성 HTML 보고서",
+          "source": "summarize.py 출력 report.html"
+        }
+      },
+      "beats": [
+        {
+          "utterance": "u01",
+          "state": "report",
+          "action": "replace"
+        }
+      ],
+      "media": "input/report.png"
+    },
+    {
+      "id": "scene-05",
+      "slide": 5,
+      "kind": "evidence",
+      "title": "기대한 집계 결과와 대조했습니다",
+      "claim": "집계 결과를 예상값과 비교했습니다.",
+      "visual_label": "기대한 집계 결과와 대조했습니다",
+      "points": [
+        "입력 5행",
+        "합계 5건",
+        "세 상태 일치"
+      ],
+      "verification": "executed",
+      "evidence": [
+        {
+          "source": "examples/automation-project/summarize.py + summary.json",
+          "finding": "합성 CSV 5행 실행. 완료2/지연2/진행1과 대조. 실제 업무 효과 미측정."
+        }
+      ],
+      "utterances": [
+        {
+          "id": "u01",
+          "text": "집계 결과를 예상값과 비교했습니다."
+        }
+      ],
+      "states": {},
+      "beats": [],
+      "table": [
+        [
+          "완료",
+          "2건",
+          "예상값 일치"
+        ],
+        [
+          "지연",
+          "2건",
+          "예상값 일치"
+        ],
+        [
+          "진행",
+          "1건",
+          "예상값 일치"
+        ]
+      ]
+    },
+    {
+      "id": "scene-06",
+      "slide": 6,
+      "kind": "flow",
+      "title": "실제 적용 전 검증할 항목입니다",
+      "claim": "빈 파일과 누락된 열은 별도 검증이 필요합니다.",
+      "visual_label": "실제 적용 전 검증할 항목입니다",
+      "points": [
+        "빈 파일",
+        "누락 열",
+        "다른 상태값"
+      ],
+      "verification": "unverified",
+      "evidence": [
+        {
+          "source": "examples/automation-project/summarize.py + summary.json",
+          "finding": "합성 CSV 5행 실행. 완료2/지연2/진행1과 대조. 실제 업무 효과 미측정."
+        }
+      ],
+      "utterances": [
+        {
+          "id": "u01",
+          "text": "빈 파일과 누락된 열은 별도 검증이 필요합니다."
+        }
+      ],
+      "states": {},
+      "beats": []
+    },
+    {
+      "id": "scene-07",
+      "slide": 7,
+      "kind": "closing",
+      "title": "현재는 작은 집계 예제입니다",
+      "claim": "외부 전송과 실제 업무 효과 측정은 없습니다.",
+      "visual_label": "현재는 작은 집계 예제입니다",
+      "points": [
+        "외부 연결 없음",
+        "실제 고객 자료 없음",
+        "시간 절감 미측정"
+      ],
+      "verification": "unverified",
+      "evidence": [
+        {
+          "source": "examples/automation-project/summarize.py + summary.json",
+          "finding": "합성 CSV 5행 실행. 완료2/지연2/진행1과 대조. 실제 업무 효과 미측정."
+        }
+      ],
+      "utterances": [
+        {
+          "id": "u01",
+          "text": "외부 전송과 실제 업무 효과 측정은 없습니다."
+        }
+      ],
+      "states": {},
+      "beats": []
+    },
+    {
+      "id": "scene-08",
+      "slide": 8,
+      "kind": "closing",
+      "title": "다음 단계는 입력 검증입니다",
+      "claim": "다양한 입력 파일로 오류 처리를 보완하겠습니다.",
+      "visual_label": "다음 단계는 입력 검증입니다",
+      "points": [
+        "입력 조건 검증",
+        "오류 안내",
+        "담당자 확인"
+      ],
+      "verification": "unverified",
+      "evidence": [
+        {
+          "source": "examples/automation-project/summarize.py + summary.json",
+          "finding": "합성 CSV 5행 실행. 완료2/지연2/진행1과 대조. 실제 업무 효과 미측정."
+        }
+      ],
+      "utterances": [
+        {
+          "id": "u01",
+          "text": "다양한 입력 파일로 오류 처리를 보완하겠습니다."
+        }
+      ],
+      "states": {},
+      "beats": []
+    }
+  ]
+}
